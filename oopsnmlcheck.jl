@@ -1,6 +1,6 @@
 
 
-using JSON
+using JSON, DataFrames
 
 oopsjson="./test/oops-3dvar/oops.json"
 
@@ -48,16 +48,23 @@ function readnml(io)
 end
 
 
+
+function compare(d1,d2) 
+    df = DataFrame(key=[],nml1=[],nml2=[])
+    for (key2,nml) in d1
+        nml2 = getkey(d2,key2,nothing)
+        if !isnothing(nml2)
+            for (key,val) in nml
+                val2 = get!(d2[key2],key,nothing)
+                push!(df,[key, val, val2])
+                println("$key: $val, $val2")
+            end 
+        end
+    end
+    return df
+end 
+
 d1 = readnmlfile("test/oops-3dvar/fort.4")
 d2 = readnmlfile("test/cnt0-3dvar/fort.4")
 
-for (key2,nml) in d1
-    nml2 = getkey(d2,key2,nothing)
-    if !isnothing(nml2)
-        for (key,val) in nml
-            val2 = get!(d2[key2],key,nothing)
-            println("$key: $val, $val2")
-        end 
-    end
-end
-
+df = compare(d1,d2)
