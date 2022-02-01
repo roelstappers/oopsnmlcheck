@@ -52,10 +52,10 @@ end
 function compare(d1,d2) 
     df = DataFrame(key=[],nml1=[],nml2=[])
     for (key2,nml) in d1
-        nml2 = getkey(d2,key2,nothing)
-        if !isnothing(nml2)
+        nml2 = getkey(d2,key2,missing)
+        if !ismissing(nml2)
             for (key,val) in nml
-                val2 = get!(d2[key2],key,nothing)
+                val2 = get!(d2[key2],key,missing)
                 push!(df,[key, val, val2])
                 println("$key: $val, $val2")
             end 
